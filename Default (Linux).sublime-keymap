@@ -1,0 +1,3 @@
+[
+	{ "keys": ["ctrl+alt+i"], "command": "increment_selection" }
+]

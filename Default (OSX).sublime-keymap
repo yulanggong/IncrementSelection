@@ -1,0 +1,3 @@
+[
+	{ "keys": ["super+ctrl+i"], "command": "increment_selection" }
+]
