@@ -37,6 +37,9 @@ class IncrementSelectionCommand(sublime_plugin.TextCommand):
             def gen(counter):
                 return self.letterEncode(start + counter).upper()
 
+        else :
+            return
+                
         counter = 0
 
         for selection in self.view.sel():
