@@ -1,4 +1,4 @@
-import sublime, sublime_plugin
+import sublime_plugin
 
 class IncrementSelectionCommand(sublime_plugin.TextCommand):
     digits = '0123456789'
