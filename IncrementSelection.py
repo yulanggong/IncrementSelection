@@ -55,7 +55,7 @@ class IncrementSelectionCommand(sublime_plugin.TextCommand):
         while number > 0:
             number -= 1
             result = self.letters[number % 26] + result
-            number /= 26
+            number //= 26
 
         return result
 
