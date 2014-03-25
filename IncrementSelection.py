@@ -13,7 +13,12 @@ class IncrementSelectionCommand(sublime_plugin.TextCommand):
 
         start = arr[0]
 
-        if start[0] in self.digits:
+        if start == '':
+            start = 1
+            def gen(counter):
+                return str(start + counter)
+
+        elif start[0] in self.digits:
             if start[0] == '0':
                 length = len(start)
                 start = int(start)
@@ -39,7 +44,7 @@ class IncrementSelectionCommand(sublime_plugin.TextCommand):
 
         else :
             return
-                
+
         counter = 0
 
         for selection in self.view.sel():
