@@ -3,6 +3,7 @@ import sublime_plugin
 class IncrementSelectionCommand(sublime_plugin.TextCommand):
     digits = '0123456789'
     letters = 'abcdefghijklmnopqrstuvwxyz'
+    special = '#'
 
     def run(self, edit):
         arr = self.view.substr(self.view.sel()[0]).replace(' ', '').split(',')
@@ -41,6 +42,11 @@ class IncrementSelectionCommand(sublime_plugin.TextCommand):
             start = self.letterDecode(start.lower())
             def gen(counter):
                 return self.letterEncode(start + counter).upper()
+
+        elif start[0] in self.special:
+            if start[0] == '#':
+                def gen(counter):
+                    return str(self.view.rowcol(selection.begin())[0] + 1)
 
         else :
             return
