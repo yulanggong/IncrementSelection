@@ -7,12 +7,24 @@ class IncrementSelectionCommand(sublime_plugin.TextCommand):
 
     def run(self, edit):
         arr = self.view.substr(self.view.sel()[0]).replace(' ', '').split(',')
+        second_digit = self.view.substr(self.view.sel()[1]).replace(' ', '').split(',')
+        start = arr[0]
         if len(arr) == 1:
-            step = 1
+
+            diff = 0
+            if start == '':
+                step = 1
+            elif start[0] in self.digits:
+                diff = int(second_digit[0]) - int(start)
+            elif start[0].lower() in self.letters:
+                diff = self.letterDecode(second_digit[0].lower()) - self.letterDecode(start[0].lower())
+
+            if diff != 0:
+                step = diff
+            else:
+                step = 1
         else:
             step = int(arr[1])
-
-        start = arr[0]
 
         if start == '':
             start = 1
@@ -36,12 +48,13 @@ class IncrementSelectionCommand(sublime_plugin.TextCommand):
         elif start[0] in self.letters:
             start = self.letterDecode(start)
             def gen(counter):
-                return self.letterEncode(start + counter)
+                print((start+counter-1)%26+1)
+                return self.letterEncode((start + counter-1)%26+1)
 
         elif start[0] in self.letters.upper():
             start = self.letterDecode(start.lower())
             def gen(counter):
-                return self.letterEncode(start + counter).upper()
+                return self.letterEncode((start + counter-1)%26+1).upper()
 
         elif start[0] in self.special:
             if start[0] == '#':

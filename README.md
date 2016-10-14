@@ -1,3 +1,9 @@
+Forked from [yulanggong/IncrementSelection](https://github.com/yulanggong/IncrementSelection)
+
+Plugin can now do both increments and decrements painlessly
+
+Increment follows the difference between the first and second number. If there is no difference, it defaults to 1. See examples for more usage details.
+
 Increment Selection
 ==================
 
@@ -33,7 +39,11 @@ Tips:  `[]` stands for a selection, `|` stands for a caret.
 
 	[1] text [1] text [1] -> 1| text 2| text 3|
 
+	[10] text [9] text [1] -> 10| text 9| text 8|
+
 	[a] text [a] text [a] -> a| text b| text c|
+
+	[a] text [c] text [a] -> a| text c| text e|
 
 	[A] text [A] text [A] -> A| text B| text C|
 
@@ -47,6 +57,7 @@ Tips:  `[]` stands for a selection, `|` stands for a caret.
 
 	[#] line 27 -> 27| line 27
 	[#] line 28 -> 28| line 28
+
 
 
 
