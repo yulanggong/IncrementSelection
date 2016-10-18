@@ -6,25 +6,25 @@ class IncrementSelectionCommand(sublime_plugin.TextCommand):
     special = '#'
 
     def run(self, edit):
-        arr = self.view.substr(self.view.sel()[0]).replace(' ', '').split(',')
-        second_digit = self.view.substr(self.view.sel()[1]).replace(' ', '').split(',')
-        start = arr[0]
-        if len(arr) == 1:
+        firstSelection = self.view.substr(self.view.sel()[0]).replace(' ', '').split(',')
+        secondSelection = self.view.substr(self.view.sel()[1]).replace(' ', '').split(',')
+        start = firstSelection[0]
 
+        if len(firstSelection) == 1:
             diff = 0
             if start == '':
                 step = 1
             elif start[0] in self.digits:
-                diff = int(second_digit[0]) - int(start)
+                diff = int(secondSelection[0]) - int(start)
             elif start[0].lower() in self.letters:
-                diff = self.letterDecode(second_digit[0].lower()) - self.letterDecode(start[0].lower())
+                diff = self.letterDecode(secondSelection[0].lower()) - self.letterDecode(start.lower())
 
             if diff != 0:
                 step = diff
             else:
                 step = 1
         else:
-            step = int(arr[1])
+            step = int(firstSelection[1])
 
         if start == '':
             start = 1
@@ -48,13 +48,12 @@ class IncrementSelectionCommand(sublime_plugin.TextCommand):
         elif start[0] in self.letters:
             start = self.letterDecode(start)
             def gen(counter):
-                print((start+counter-1)%26+1)
-                return self.letterEncode((start + counter-1)%26+1)
+                return self.letterEncode(start + counter)
 
         elif start[0] in self.letters.upper():
             start = self.letterDecode(start.lower())
             def gen(counter):
-                return self.letterEncode((start + counter-1)%26+1).upper()
+                return self.letterEncode(start + counter).upper()
 
         elif start[0] in self.special:
             if start[0] == '#':
