@@ -6,25 +6,23 @@ class IncrementSelectionCommand(sublime_plugin.TextCommand):
     special = '#'
 
     def run(self, edit):
-        firstSelection = self.view.substr(self.view.sel()[0]).replace(' ', '').split(',')
-        secondSelection = self.view.substr(self.view.sel()[1]).replace(' ', '').split(',')
-        start = firstSelection[0]
+        selections = self.view.sel()
+        first_selection = self.view.substr(selections[0]).replace(' ', '').split(',')
+        start = first_selection[0]
+        step = 1
 
-        if len(firstSelection) == 1:
-            diff = 0
-            if start == '':
-                step = 1
-            elif start[0] in self.digits:
-                diff = int(secondSelection[0]) - int(start)
-            elif start[0].lower() in self.letters:
-                diff = self.letterDecode(secondSelection[0].lower()) - self.letterDecode(start.lower())
-
-            if diff != 0:
-                step = diff
-            else:
+        if len(first_selection) == 1:
+            if start != '' and len(selections) > 1:
+                second = self.view.substr(selections[1]).replace(' ', '').split(',')[0]
+                if start != second:
+                    if start[0] in self.digits:
+                        step = int(second) - int(start)
+                    elif start[0].lower() in self.letters:
+                        step = self.letter_decode(second) - self.letter_decode(start)
+            if step == 0:
                 step = 1
         else:
-            step = int(firstSelection[1])
+            step = int(first_selection[1])
 
         if start == '':
             start = 1
@@ -46,21 +44,21 @@ class IncrementSelectionCommand(sublime_plugin.TextCommand):
                     return str(start + counter)
 
         elif start[0] in self.letters:
-            start = self.letterDecode(start)
+            start = self.letter_decode(start)
             def gen(counter):
-                return self.letterEncode(start + counter)
+                return self.letter_encode(start + counter)
 
         elif start[0] in self.letters.upper():
-            start = self.letterDecode(start.lower())
+            start = self.letter_decode(start)
             def gen(counter):
-                return self.letterEncode(start + counter).upper()
+                return self.letter_encode(start + counter).upper()
 
         elif start[0] in self.special:
             if start[0] == '#':
                 def gen(counter):
                     return str(self.view.rowcol(selection.begin())[0] + 1)
 
-        else :
+        else:
             return
 
         counter = 0
@@ -72,7 +70,7 @@ class IncrementSelectionCommand(sublime_plugin.TextCommand):
         for selection in self.view.sel():
             self.view.erase(edit, selection)
 
-    def letterEncode(self, number):
+    def letter_encode(self, number):
         result = ''
 
         while number > 0:
@@ -82,10 +80,10 @@ class IncrementSelectionCommand(sublime_plugin.TextCommand):
 
         return result
 
-    def letterDecode(self, str):
+    def letter_decode(self, str):
         result = 0
 
-        for i in str:
+        for i in str.lower():
             result *= 26
             result += self.letters.index(i) + 1
 
